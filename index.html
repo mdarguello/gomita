@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Gomita💓</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: #000000;
+            --card: #1A1A1A;
+            --card-alt: #141414;
+            --border: #2A2A2A;
+            --fg: #FFFFFF;
+            --muted: #6A6A6A;
+            --muted-light: #9A9A9A;
+            --accent: #FE2C55;
+            --accent-dark: #D42347;
+            --accent-glow: rgba(254, 44, 85, 0.25);
+            --pink: #FF4D8D;
+            --pink-soft: #FF8FBB;
+            --pink-glow: rgba(255, 77, 141, 0.2);
+            --cyan: #25F4EE;
+            --cyan-glow: rgba(37, 244, 238, 0.2);
+            --green: #00D26A;
+            --yellow: #FFD700;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg);
+            color: var(--fg);
+            min-height: 100dvh;
+            overflow-x: hidden;
+        }
+
+        .app {
+            max-width: 430px;
+            margin: 0 auto;
+            min-height: 100dvh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* === PANTALLAS === */
+        .screen {
+            position: absolute;
+            inset: 0;
+            padding: 0 24px;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transform: translateX(40px);
+            transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+            z-index: 1;
+            overflow-y: auto;
+        }
+        .screen.active {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: all;
+            z-index: 2;
+        }
+        .screen.exit {
+            opacity: 0;
+            transform: translateX(-40px);
+        }
+
+        /* === BOTONES === */
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background: var(--accent);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary:active { transform: scale(0.97); background: var(--accent-dark); }
+        .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .btn-outline {
+            width: 100%;
+            padding: 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            background: transparent;
+            color: var(--fg);
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-outline:active { transform: scale(0.97); border-color: var(--muted-light); }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            background: transparent;
+            color: var(--fg);
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-secondary:active { transform: scale(0.97); border-color: var(--pink); color: var(--pink); }
+
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            background: transparent;
+            color: var(--fg);
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .btn-icon:active { background: rgba(255,255,255,0.08); }
+
+        /* === INPUT === */
+        .input-tiktok {
+            width: 100%;
+            padding: 16px 18px;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            background: var(--card);
+            color: var(--fg);
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-align: center;
+            text-transform: uppercase;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .input-tiktok::placeholder { color: var(--muted); font-weight: 400; letter-spacing: 2px; font-size: 16px; }
+        .input-tiktok:focus { border-color: var(--pink); }
+
+        /* === WELCOME === */
+        .welcome-top {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .heart-zone {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 28px;
+        }
+        .heart-emoji {
+            font-size: 68px;
+            animation: heartPulse 1.5s ease-in-out infinite;
+            filter: drop-shadow(0 0 25px rgba(255, 77, 141, 0.6));
+            position: relative;
+            z-index: 2;
+        }
+        @keyframes heartPulse {
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.15); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.08); }
+            60% { transform: scale(1); }
+        }
+        .heart-ring {
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            background: linear-gradient(135deg, var(--pink), var(--cyan)) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            animation: ringRotate 5s linear infinite;
+        }
+        @keyframes ringRotate { to { transform: rotate(360deg); } }
+        .heart-ring-2 {
+            position: absolute;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            border: 1px solid transparent;
+            background: linear-gradient(135deg, var(--accent), var(--pink-soft)) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            animation: ringRotate 8s linear infinite reverse;
+            opacity: 0.4;
+        }
+
+        .heart-particle {
+            position: absolute;
+            opacity: 0;
+            animation: floatHeart 3.5s ease-out infinite;
+            z-index: 1;
+            font-size: 12px;
+        }
+        @keyframes floatHeart {
+            0% { transform: translateY(0) scale(0.5) rotate(0deg); opacity: 0; }
+            15% { opacity: 0.8; }
+            100% { transform: translateY(-140px) scale(0) rotate(20deg); opacity: 0; }
+        }
+
+        .welcome-name {
+            font-size: 34px;
+            font-weight: 900;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--pink), var(--pink-soft), var(--cyan));
+            background-size: 200% 200%;
+            animation: gradientShift 4s ease-in-out infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .welcome-subtitle {
+            font-size: 15px;
+            color: var(--muted-light);
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        .welcome-desc {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.7;
+            max-width: 300px;
+            margin-bottom: 48px;
+        }
+        .welcome-buttons {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-bottom: 60px;
+        }
+        .welcome-streak-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(254, 44, 85, 0.1);
+            border: 1px solid rgba(254, 44, 85, 0.2);
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        /* === CREATE / JOIN === */
+        .screen-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-top: 16px;
+            margin-bottom: 40px;
+        }
+        .screen-header h2 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .form-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            text-align: center;
+        }
+        .form-area p {
+            font-size: 14px;
+            color: var(--muted-light);
+            line-height: 1.6;
+        }
+        .code-box {
+            width: 100%;
+            padding: 28px 20px;
+            background: var(--card);
+            border: 1.5px solid var(--border);
+            border-radius: 16px;
+            text-align: center;
+        }
+        .code-box .label {
+            font-size: 12px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 12px;
+        }
+        .code-box .code {
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: 6px;
+            background: linear-gradient(135deg, var(--pink), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .form-actions {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-bottom: 60px;
+        }
+        .join-form { width: 100%; }
+        .join-form .input-tiktok { margin-bottom: 16px; }
+        .join-hint {
+            margin-top: 16px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        /* === STREAK SCREEN === */
+        .streak-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 12px;
+            padding-bottom: 8px;
+        }
+        .streak-header-name {
+            font-size: 16px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--pink), var(--pink-soft));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .streak-hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0 12px;
+        }
+        .streak-badge {
+            width: 136px;
+            height: 136px;
+            border-radius: 50%;
+            padding: 3px;
+            background: linear-gradient(135deg, var(--accent), var(--pink), var(--cyan));
+            background-size: 200% 200%;
+            animation: badgeGradient 5s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        @keyframes badgeGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .streak-badge:active { transform: scale(0.95); }
+        .streak-badge-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: var(--bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+        }
+        .streak-badge .badge-fire {
+            font-size: 26px;
+            line-height: 1;
+        }
+        .streak-badge .badge-num {
+            font-size: 34px;
+            font-weight: 900;
+            line-height: 1.1;
+        }
+        .streak-badge.confirmed {
+            animation: badgePop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), badgeGradient 5s ease-in-out infinite;
+        }
+        @keyframes badgePop {
+            0% { transform: scale(1); }
+            40% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+        .streak-badge-glow {
+            position: absolute;
+            inset: -20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s;
+            z-index: -1;
+        }
+        .streak-badge.confirmed .streak-badge-glow { opacity: 1; }
+
+        .streak-label {
+            margin-top: 14px;
+            font-size: 15px;
+            color: var(--muted-light);
+            font-weight: 500;
+        }
+
+        /* Estado */
+        .status-card {
+            width: 100%;
+            padding: 16px 18px;
+            border-radius: 14px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .status-card.pending {
+            background: rgba(255, 215, 0, 0.08);
+            border: 1px solid rgba(255, 215, 0, 0.15);
+        }
+        .status-card.waiting {
+            background: rgba(37, 244, 238, 0.08);
+            border: 1px solid rgba(37, 244, 238, 0.15);
+        }
+        .status-card.done {
+            background: rgba(0, 210, 106, 0.08);
+            border: 1px solid rgba(0, 210, 106, 0.15);
+        }
+        .status-card.grace {
+            background: rgba(255, 77, 141, 0.08);
+            border: 1px solid rgba(255, 77, 141, 0.2);
+        }
+        .status-card.lost {
+            background: rgba(254, 44, 85, 0.08);
+            border: 1px solid rgba(254, 44, 85, 0.15);
+        }
+        .status-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .status-card.pending .status-icon { background: rgba(255,215,0,0.15); color: var(--yellow); }
+        .status-card.waiting .status-icon { background: rgba(37,244,238,0.15); color: var(--cyan); }
+        .status-card.done .status-icon { background: rgba(0,210,106,0.15); color: var(--green); }
+        .status-card.grace .status-icon { background: rgba(255,77,141,0.15); color: var(--pink); }
+        .status-card.lost .status-icon { background: rgba(254,44,85,0.15); color: var(--accent); }
+        .status-text {
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+        .status-sub {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 400;
+            margin-top: 2px;
+        }
+
+        /* Timer */
+        .timer-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 18px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+        .timer-row i { font-size: 12px; color: var(--accent); }
+        .timer-digits {
+            font-variant-numeric: tabular-nums;
+            font-weight: 600;
+            color: var(--muted-light);
+        }
+
+        /* Actions */
+        .actions-area {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            padding-bottom: 12px;
+        }
+
+        .code-share-box {
+            width: 100%;
+            padding: 20px;
+            background: var(--card);
+            border: 1.5px solid var(--border);
+            border-radius: 14px;
+            text-align: center;
+        }
+        .code-share-box .share-label {
+            font-size: 12px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        .code-share-box .share-code {
+            font-size: 34px;
+            font-weight: 800;
+            letter-spacing: 6px;
+            color: var(--cyan);
+            margin-bottom: 4px;
+        }
+        .code-share-box .share-hint {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 10px;
+        }
+        .code-share-box .share-hint i { margin-right: 4px; }
+
+        .verify-box {
+            width: 100%;
+            padding: 18px;
+            background: var(--card-alt);
+            border: 1.5px dashed var(--border);
+            border-radius: 14px;
+        }
+        .verify-box .verify-label {
+            font-size: 13px;
+            color: var(--muted-light);
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+        .verify-row {
+            display: flex;
+            gap: 10px;
+        }
+        .verify-row .input-tiktok {
+            flex: 1;
+            padding: 14px;
+            font-size: 22px;
+        }
+        .verify-row .btn-primary {
+            width: auto;
+            padding: 14px 20px;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .ready-msg {
+            text-align: center;
+            padding: 24px 0;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+        .ready-msg i { color: var(--pink); margin: 0 4px; }
+
+        /* Room info */
+        .room-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px 0 40px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+        .room-info strong {
+            color: var(--muted-light);
+            letter-spacing: 2px;
+        }
+        .btn-copy-sm {
+            background: none;
+            border: none;
+            color: var(--muted);
+            cursor: pointer;
+            padding: 4px;
+            font-size: 13px;
+            transition: color 0.2s;
+        }
+        .btn-copy-sm:active { color: var(--cyan); }
+
+        /* === MODALES === */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.75);
+            z-index: 100;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .modal-overlay.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .modal-sheet {
+            width: 100%;
+            max-width: 430px;
+            background: var(--card);
+            border-radius: 20px 20px 0 0;
+            padding: 12px 24px 40px;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .modal-overlay.show .modal-sheet { transform: translateY(0); }
+        .modal-handle {
+            width: 36px;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            margin: 0 auto 20px;
+        }
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .modal-text {
+            font-size: 14px;
+            color: var(--muted-light);
+            line-height: 1.8;
+        }
+        .modal-text strong { color: var(--fg); }
+        .modal-text .step {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+            align-items: flex-start;
+        }
+        .modal-text .step-num {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--pink), var(--cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .modal-close {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: var(--card-alt);
+            color: var(--fg);
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 24px;
+            border: 1px solid var(--border);
+        }
+        .modal-close:active { background: var(--border); }
+
+        /* === CONFETTI === */
+        .confetti-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 200;
+            overflow: hidden;
+        }
+        .confetti-piece {
+            position: absolute;
+            top: -20px;
+            animation: confettiFall linear forwards;
+        }
+        @keyframes confettiFall {
+            0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+            80% { opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg) scale(0.3); opacity: 0; }
+        }
+
+        /* === TOAST === */
+        .toast {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: #2A2A2A;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 300;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            white-space: nowrap;
+            border: 1px solid var(--border);
+            max-width: 90vw;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* === SHAKE === */
+        .shake { animation: shake 0.4s ease-in-out; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-8px); }
+            40% { transform: translateX(8px); }
+            60% { transform: translateX(-5px); }
+            80% { transform: translateX(5px); }
+        }
+
+        /* === BG GLOW === */
+        .bg-glow {
+            position: fixed;
+            top: -120px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--pink-glow) 0%, transparent 70%);
+            opacity: 0.3;
+            z-index: 0;
+            pointer-events: none;
+            transition: opacity 0.8s;
+        }
+
+        .lost-fire { filter: grayscale(1) brightness(0.5); }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-glow" id="bgGlow"></div>
+
+<div class="app" id="app">
+
+    <!-- ============ WELCOME ============ -->
+    <div id="screen-welcome" class="screen active">
+        <div class="welcome-top">
+            <div class="heart-zone" id="welcomeHeartZone">
+                <div class="heart-ring-2"></div>
+                <div class="heart-ring"></div>
+                <span class="heart-emoji">💓</span>
+            </div>
+            <h1 class="welcome-name">Gomita</h1>
+            <div class="welcome-streak-badge">
+                <span>🔥</span>
+                <span>225 días de racha</span>
+            </div>
+            <p class="welcome-desc">
+                No dejes que se apaga. A partir de mañana los dos deben activar desde su celular antes de las 12 de la noche.
+            </p>
+        </div>
+        <div class="welcome-buttons">
+            <button class="btn-primary" onclick="goCreate()">Crear conexión</button>
+            <button class="btn-outline" onclick="goJoin()">Unirme con código</button>
+        </div>
+    </div>
+
+    <!-- ============ CREATE ============ -->
+    <div id="screen-create" class="screen">
+        <div class="screen-header">
+            <button class="btn-icon" onclick="navigateTo('screen-welcome')"><i class="fas fa-arrow-left"></i></button>
+            <h2>Gomita💓</h2>
+        </div>
+        <div class="form-area">
+            <p>Pásale este código a tu amiga para que se conecte</p>
+            <div class="code-box">
+                <div class="label">Código de conexión</div>
+                <div class="code" id="createCode">RK-XXXX</div>
+            </div>
+            <button class="btn-secondary" onclick="copyText(document.getElementById('createCode').textContent)">
+                <i class="fas fa-copy"></i> Copiar código
+            </button>
+        </div>
+        <div class="form-actions">
+            <button class="btn-primary" onclick="confirmCreate()">Listo, continuar</button>
+        </div>
+    </div>
+
+    <!-- ============ JOIN ============ -->
+    <div id="screen-join" class="screen">
+        <div class="screen-header">
+            <button class="btn-icon" onclick="navigateTo('screen-welcome')"><i class="fas fa-arrow-left"></i></button>
+            <h2>Gomita💓</h2>
+        </div>
+        <div class="form-area">
+            <p>Ingresa el código que te pasó tu amiga</p>
+            <div class="join-form">
+                <input type="text" id="joinInput" class="input-tiktok" placeholder="RK-XXXX" maxlength="7" autocomplete="off" spellcheck="false">
+                <button class="btn-primary" onclick="doJoin()">Unirme</button>
+                <p class="join-hint">Formato: RK- seguido de 4 letras o números</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ STREAK ============ -->
+    <div id="screen-streak" class="screen">
+        <div class="streak-header">
+            <button class="btn-icon" onclick="showResetConfirm()"><i class="fas fa-arrow-left"></i></button>
+            <span class="streak-header-name">Gomita💓🥺</span>
+            <button class="btn-icon" onclick="showModal()"><i class="fas fa-info-circle"></i></button>
+        </div>
+
+        <div class="streak-hero">
+            <div class="streak-badge" id="streakBadge" onclick="pokeBadge()">
+                <div class="streak-badge-glow"></div>
+                <div class="streak-badge-inner">
+                    <span class="badge-fire" id="badgeFire">🔥</span>
+                    <span class="badge-num" id="badgeNum">225</span>
+                </div>
+            </div>
+            <div class="streak-label" id="streakLabel">días de racha</div>
+        </div>
+
+        <div class="timer-row" id="timerRow" style="display:none;">
+            <i class="fas fa-clock"></i>
+            <span>Quedan</span>
+            <span class="timer-digits" id="timerDigits">00:00:00</span>
+            <span>para activar</span>
+        </div>
+
+        <div id="statusArea"></div>
+        <div id="actionsArea" class="actions-area"></div>
+
+        <div class="room-info">
+            <span>Sala: <strong id="roomCodeDisplay">RK-XXXX</strong></span>
+            <button class="btn-copy-sm" onclick="copyText(state.roomId)"><i class="fas fa-copy"></i></button>
+        </div>
+    </div>
+
+</div>
+
+<!-- ============ MODAL INFO ============ -->
+<div class="modal-overlay" id="infoModal" onclick="hideModal(event)">
+    <div class="modal-sheet" onclick="event.stopPropagation()">
+        <div class="modal-handle"></div>
+        <div class="modal-title">Cómo funciona Gomita💓</div>
+        <div class="modal-text">
+            <div class="step">
+                <span class="step-num">1</span>
+                <span><strong>Tú presionas "Mantener racha"</strong> y obtienes un código de 4 dígitos del día.</span>
+            </div>
+            <div class="step">
+                <span class="step-num">2</span>
+                <span><strong>Tu amiga hace lo mismo</strong> en su celular.</span>
+            </div>
+            <div class="step">
+                <span class="step-num">3</span>
+                <span><strong>Se pasan los códigos</strong> por mensaje y cada quien ingresa el de la otra.</span>
+            </div>
+            <div class="step">
+                <span class="step-num">4</span>
+                <span>Cuando <strong>ambos verifican</strong>, la racha se mantiene. Si falta uno, <strong>no cuenta</strong>.</span>
+            </div>
+            <p style="margin-top:14px; color:var(--muted); font-size:13px;">
+                A las <strong style="color:var(--accent);">12:00 AM</strong> se reinicia. Si no completan antes de eso, se pierde. Tienen hasta las <strong style="color:var(--accent);">11:59:59 PM</strong> de cada día.
+            </p>
+        </div>
+        <button class="modal-close" onclick="hideModal()">Entendido</button>
+    </div>
+</div>
+
+<!-- ============ MODAL RESET ============ -->
+<div class="modal-overlay" id="resetModal" onclick="hideResetModal(event)">
+    <div class="modal-sheet" onclick="event.stopPropagation()">
+        <div class="modal-handle"></div>
+        <div class="modal-title" style="color:var(--accent);">Salir de Gomita</div>
+        <div class="modal-text">
+            <p>Se borrará todo. Guarda el código de sala si quieres volver a empezar.</p>
+        </div>
+        <div style="display:flex; gap:10px; margin-top:24px;">
+            <button class="btn-outline" style="flex:1;" onclick="hideResetModal()">Cancelar</button>
+            <button class="btn-primary" style="flex:1; background:var(--accent-dark);" onclick="doReset()">Salir</button>
+        </div>
+    </div>
+</div>
+
+<!-- ============ CONFETTI ============ -->
+<div class="confetti-container" id="confettiContainer"></div>
+
+<!-- ============ TOAST ============ -->
+<div class="toast" id="toast"></div>
+
+<script>
+    /* ==========================================
+       ESTADO — clave nueva para evitar conflicto
+       con la versión anterior
+       ========================================== */
+    const STORAGE_KEY = 'gomita_racha_v1';
+
+    function getToday() {
+        const d = new Date();
+        return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+    }
+
+    function daysBetween(dateStr) {
+        if (!dateStr) return 999;
+        const [y, m, d] = dateStr.split('-').map(Number);
+        const target = new Date(y, m, d);
+        const now = new Date();
+        target.setHours(0, 0, 0, 0);
+        now.setHours(0, 0, 0, 0);
+        return Math.floor((now - target) / 86400000);
+    }
+
+    /* Estado inicial con 225 días pre-cargados */
+    function createInitialState() {
+        const today = getToday();
+        return {
+            roomId: null,
+            isCreator: false,
+            streakCount: 225,
+            lastStreakDate: today,
+            graceDate: today,        // hoy es día libre, no hay que activar
+            confirmDate: today,
+            myConfirmed: true,       // pre-confirmado por el día de gracia
+            partnerConfirmed: true,
+            lost: false
+        };
+    }
+
+    function loadState() {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (raw) {
+                const s = JSON.parse(raw);
+                if (s && s.roomId) return s;
+            }
+        } catch (e) {}
+        return createInitialState();
+    }
+
+    let state = loadState();
+
+    function saveState() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    /* ==========================================
+       TOKENS — códigos de verificación diarios
+       Cada usuario genera uno distinto según
+       su rol (creador/B) + fecha + sala
+       ========================================== */
+    function hashStr(str) {
+        let hash = 5381;
+        for (let i = 0; i < str.length; i++) {
+            hash = ((hash << 5) + hash) + str.charCodeAt(i);
+            hash = hash & hash;
+        }
+        return Math.abs(hash);
+    }
+
+    function getMyToken() {
+        const role = state.isCreator ? 'A' : 'B';
+        const h = hashStr(state.roomId + ':' + getToday() + ':' + role + ':gomita225');
+        return h.toString().slice(-4).padStart(4, '0');
+    }
+
+    function getPartnerToken() {
+        const role = state.isCreator ? 'B' : 'A';
+        const h = hashStr(state.roomId + ':' + getToday() + ':' + role + ':gomita225');
+        return h.toString().slice(-4).padStart(4, '0');
+    }
+
+    /* ==========================================
+       CÓDIGO DE SALA
+       ========================================== */
+    function generateRoomId() {
+        const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        let code = 'RK-';
+        for (let i = 0; i < 4; i++) {
+            code += chars[Math.floor(Math.random() * chars.length)];
+        }
+        return code;
+    }
+
+    /* ==========================================
+       NAVEGACIÓN
+       ========================================== */
+    let currentScreen = 'screen-welcome';
+
+    function navigateTo(targetId) {
+        const current = document.getElementById(currentScreen);
+        const target = document.getElementById(targetId);
+        if (!current || !target || currentScreen === targetId) return;
+
+        current.classList.remove('active');
+        current.classList.add('exit');
+        setTimeout(() => current.classList.remove('exit'), 450);
+
+        target.classList.add('active');
+        currentScreen = targetId;
+
+        const glow = document.getElementById('bgGlow');
+        glow.style.opacity = targetId === 'screen-streak' ? '0.35' : '0.15';
+    }
+
+    /* ==========================================
+       WELCOME — partículas de corazón
+       ========================================== */
+    function initWelcome() {
+        const zone = document.getElementById('welcomeHeartZone');
+        const hearts = ['💓', '💗', '💕', '♥', '❤️‍🔥', '🩷'];
+        for (let i = 0; i < 16; i++) {
+            const p = document.createElement('span');
+            p.className = 'heart-particle';
+            p.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+            p.style.left = (20 + Math.random() * 60) + '%';
+            p.style.bottom = (5 + Math.random() * 25) + '%';
+            p.style.animationDelay = (Math.random() * 3.5) + 's';
+            p.style.animationDuration = (2.5 + Math.random() * 2.5) + 's';
+            p.style.fontSize = (8 + Math.random() * 10) + 'px';
+            zone.appendChild(p);
+        }
+    }
+
+    /* ==========================================
+       CREAR SALA
+       ========================================== */
+    let tempRoomId = null;
+
+    function goCreate() {
+        tempRoomId = generateRoomId();
+        document.getElementById('createCode').textContent = tempRoomId;
+        navigateTo('screen-create');
+    }
+
+    function confirmCreate() {
+        // Preservar los 225 días pre-cargados
+        state.roomId = tempRoomId;
+        state.isCreator = true;
+        saveState();
+        renderStreakScreen();
+        navigateTo('screen-streak');
+    }
+
+    /* ==========================================
+       UNIRSE A SALA
+       ========================================== */
+    function goJoin() {
+        const input = document.getElementById('joinInput');
+        input.value = '';
+        navigateTo('screen-join');
+        setTimeout(() => input.focus(), 500);
+    }
+
+    function doJoin() {
+        const input = document.getElementById('joinInput');
+        const code = input.value.trim().toUpperCase();
+
+        if (!/^RK-[A-Z0-9]{4}$/.test(code)) {
+            input.classList.add('shake');
+            setTimeout(() => input.classList.remove('shake'), 500);
+            showToast('Código inválido. Usa formato RK-XXXX');
+            return;
+        }
+
+        // Preservar los 225 días pre-cargados
+        state.roomId = code;
+        state.isCreator = false;
+        saveState();
+        renderStreakScreen();
+        navigateTo('screen-streak');
+        showToast('Te conectaste a Gomita💓');
+    }
+
+    document.getElementById('joinInput').addEventListener('input', function(e) {
+        let val = this.value.toUpperCase().replace(/[^A-Z0-9-]/g, '');
+        if (val.length > 2 && val[2] !== '-') {
+            val = val.slice(0, 2) + '-' + val.slice(2);
+        }
+        this.value = val.slice(0, 7);
+    });
+
+    /* ==========================================
+       PANTALLA DE RACHA — renderizado dinámico
+       ========================================== */
+    function renderStreakScreen() {
+        const today = getToday();
+        const badge = document.getElementById('streakBadge');
+        const badgeNum = document.getElementById('badgeNum');
+        const badgeFire = document.getElementById('badgeFire');
+        const streakLabel = document.getElementById('streakLabel');
+        const statusArea = document.getElementById('statusArea');
+        const actionsArea = document.getElementById('actionsArea');
+        const timerRow = document.getElementById('timerRow');
+        const roomDisplay = document.getElementById('roomCodeDisplay');
+
+        roomDisplay.textContent = state.roomId;
+        badgeNum.textContent = state.streakCount;
+        badge.classList.remove('confirmed');
+
+        /* --- Detectar si se perdió la racha ---
+           Se pierde si pasaron 2+ días desde la última
+           vez que AMBOS confirmaron */
+        if (state.lastStreakDate && daysBetween(state.lastStreakDate) > 1 && !state.lost) {
+            state.lost = true;
+            state.myConfirmed = false;
+            state.partnerConfirmed = false;
+            saveState();
+        }
+
+        /* --- Resetear confirmaciones si es un nuevo día ---
+           A las 12:00 AM getToday() cambia y todo se reinicia */
+        if (state.confirmDate !== today) {
+            state.myConfirmed = false;
+            state.partnerConfirmed = false;
+            state.confirmDate = null;
+            if (state.lastStreakDate && daysBetween(state.lastStreakDate) > 1) {
+                state.lost = true;
+            }
+            saveState();
+        }
+
+        // ============ RACHA PERDIDA ============
+        if (state.lost) {
+            badgeFire.textContent = '💔';
+            badgeFire.classList.add('lost-fire');
+            streakLabel.textContent = 'racha perdida';
+            timerRow.style.display = 'none';
+            statusArea.innerHTML = `
+                <div class="status-card lost">
+                    <div class="status-icon"><i class="fas fa-heart-crack"></i></div>
+                    <div>
+                        <div class="status-text">Se perdió la racha de ${state.streakCount} días</div>
+                        <div class="status-sub">Pasó un día sin que ambos activaran</div>
+                    </div>
+                </div>`;
+            actionsArea.innerHTML = `
+                <button class="btn-primary" onclick="restartStreak()">
+                    <i class="fas fa-rotate-right" style="margin-right:8px;"></i>Empezar de nuevo
+                </button>`;
+            return;
+        }
+
+        badgeFire.textContent = '🔥';
+        badgeFire.classList.remove('lost-fire');
+
+        // ============ DÍA DE GRACIA (hoy, sin activar) ============
+        if (state.graceDate === today) {
+            badge.classList.add('confirmed');
+            streakLabel.textContent = 'días de racha';
+            timerRow.style.display = 'flex';
+            statusArea.innerHTML = `
+                <div class="status-card grace">
+                    <div class="status-icon"><i class="fas fa-heart"></i></div>
+                    <div>
+                        <div class="status-text" style="color:var(--pink);">Racha activa hoy</div>
+                        <div class="status-sub">A partir de mañana necesitarán activar juntos antes de las 12</div>
+                    </div>
+                </div>`;
+            actionsArea.innerHTML = `
+                <div class="ready-msg">
+                    <i class="fas fa-heart"></i> Mañana a las 12:00 AM se apaga <i class="fas fa-heart"></i><br>
+                    Tendrán que activar los dos para mantenerla
+                </div>`;
+            return;
+        }
+
+        // ============ AMBOS CONFIRMARON HOY ============
+        if (state.myConfirmed && state.partnerConfirmed && state.confirmDate === today) {
+            badge.classList.add('confirmed');
+            streakLabel.textContent = 'días de racha';
+            timerRow.style.display = 'flex';
+            statusArea.innerHTML = `
+                <div class="status-card done">
+                    <div class="status-icon"><i class="fas fa-check"></i></div>
+                    <div>
+                        <div class="status-text" style="color:var(--green);">Racha activada hoy</div>
+                        <div class="status-sub">Mañana a las 12 se reinicia, no se les olvide</div>
+                    </div>
+                </div>`;
+            actionsArea.innerHTML = `
+                <div class="ready-msg">
+                    <i class="fas fa-fire"></i> Listo por hoy, mañana vuelvan a activar <i class="fas fa-fire"></i>
+                </div>`;
+            return;
+        }
+
+        // ============ YO CONFIRMÉ, FALTA ELLA ============
+        if (state.myConfirmed && !state.partnerConfirmed) {
+            streakLabel.textContent = 'días de racha';
+            timerRow.style.display = 'flex';
+            const myCode = getMyToken();
+            statusArea.innerHTML = `
+                <div class="status-card waiting">
+                    <div class="status-icon"><i class="fas fa-hourglass-half"></i></div>
+                    <div>
+                        <div class="status-text" style="color:var(--cyan);">Esperando a tu amiga</div>
+                        <div class="status-sub">Ya activaste, falta que ella verifique tu código</div>
+                    </div>
+                </div>`;
+            actionsArea.innerHTML = `
+                <div class="code-share-box">
+                    <div class="share-label">Tu código de hoy</div>
+                    <div class="share-code">${myCode}</div>
+                    <button class="btn-secondary" onclick="copyText('${myCode}')" style="margin:10px auto 0;">
+                        <i class="fas fa-copy"></i> Copiar y enviar
+                    </button>
+                    <div class="share-hint"><i class="fas fa-share"></i> Pásale este código por mensaje</div>
+                </div>
+                <div class="verify-box">
+                    <div class="verify-label">Ingresa el código de tu amiga</div>
+                    <div class="verify-row">
+                        <input type="text" id="verifyInput" class="input-tiktok" placeholder="0000" maxlength="4" inputmode="numeric">
+                        <button class="btn-primary" onclick="verifyPartner()">Verificar</button>
+                    </div>
+                </div>`;
+            setTimeout(() => {
+                const vi = document.getElementById('verifyInput');
+                if (vi) {
+                    vi.addEventListener('input', function() {
+                        this.value = this.value.replace(/[^0-9]/g, '').slice(0, 4);
+                    });
+                    vi.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter') verifyPartner();
+                    });
+                }
+            }, 100);
+            return;
+        }
+
+        // ============ NINGUNO HA ACTIVADO (día normal) ============
+        streakLabel.textContent = 'días de racha';
+        timerRow.style.display = 'flex';
+        statusArea.innerHTML = `
+            <div class="status-card pending">
+                <div class="status-icon"><i class="fas fa-fire"></i></div>
+                <div>
+                    <div class="status-text" style="color:var(--yellow);">Hay que activar la racha</div>
+                    <div class="status-sub">Los dos deben activar antes de las 12 de la noche</div>
+                </div>
+            </div>`;
+        actionsArea.innerHTML = `
+            <button class="btn-primary" onclick="activateMyStreak()" style="padding:18px; font-size:17px;">
+                <i class="fas fa-fire" style="margin-right:8px;"></i>Mantener racha
+            </button>`;
+    }
+
+    /* ==========================================
+       ACCIONES
+       ========================================== */
+    function activateMyStreak() {
+        state.confirmDate = getToday();
+        state.myConfirmed = true;
+        saveState();
+        renderStreakScreen();
+        showToast('Tu código se generó, pásalo a tu amiga');
+    }
+
+    function verifyPartner() {
+        const input = document.getElementById('verifyInput');
+        if (!input) return;
+        const code = input.value.trim();
+
+        if (code.length !== 4) {
+            input.classList.add('shake');
+            setTimeout(() => input.classList.remove('shake'), 500);
+            showToast('Ingresa los 4 dígitos');
+            return;
+        }
+
+        const expected = getPartnerToken();
+
+        if (code === expected) {
+            state.confirmDate = getToday();
+            state.partnerConfirmed = true;
+
+            if (state.myConfirmed) {
+                // Ambos confirmaron → racha del día completada
+                state.streakCount++;
+                state.lastStreakDate = getToday();
+                saveState();
+                renderStreakScreen();
+                launchConfetti();
+                showToast('Racha de ' + state.streakCount + ' días');
+            } else {
+                saveState();
+                renderStreakScreen();
+                showToast('Código verificado');
+            }
+        } else {
+            input.classList.add('shake');
+            setTimeout(() => input.classList.remove('shake'), 500);
+            input.value = '';
+            showToast('Código incorrecto, verifica con tu amiga');
+        }
+    }
+
+    function restartStreak() {
+        const roomId = state.roomId;
+        const isCreator = state.isCreator;
+        state = createInitialState();
+        state.roomId = roomId;
+        state.isCreator = isCreator;
+        state.streakCount = 0;
+        state.graceDate = null; // Sin día de gracia al reiniciar
+        state.myConfirmed = false;
+        state.partnerConfirmed = false;
+        state.confirmDate = null;
+        saveState();
+        renderStreakScreen();
+        showToast('Nueva racha iniciada');
+    }
+
+    function pokeBadge() {
+        const badge = document.getElementById('streakBadge');
+        badge.style.transform = 'scale(0.92)';
+        setTimeout(() => badge.style.transform = '', 150);
+    }
+
+    /* ==========================================
+       TIMER — cuenta regresiva hasta las 12 AM
+       ========================================== */
+    function updateTimer() {
+        if (currentScreen !== 'screen-streak') return;
+        const timerRow = document.getElementById('timerRow');
+        const timerDigits = document.getElementById('timerDigits');
+        if (!timerRow || timerRow.style.display === 'none') return;
+
+        const now = new Date();
+        const end = new Date(now);
+        end.setHours(23, 59, 59, 999);
+        const diff = Math.max(0, end - now);
+
+        const h = Math.floor(diff / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+
+        timerDigits.textContent =
+            String(h).padStart(2, '0') + ':' +
+            String(m).padStart(2, '0') + ':' +
+            String(s).padStart(2, '0');
+    }
+
+    setInterval(updateTimer, 1000);
+
+    /* ==========================================
+       MODALES
+       ========================================== */
+    function showModal() {
+        document.getElementById('infoModal').classList.add('show');
+    }
+    function hideModal(e) {
+        if (e && e.target !== document.getElementById('infoModal') && !e.target.closest('.modal-close')) return;
+        document.getElementById('infoModal').classList.remove('show');
+    }
+    function showResetConfirm() {
+        document.getElementById('resetModal').classList.add('show');
+    }
+    function hideResetModal(e) {
+        if (e && e.target !== document.getElementById('resetModal')) return;
+        document.getElementById('resetModal').classList.remove('show');
+    }
+    function doReset() {
+        state = createInitialState();
+        saveState();
+        hideResetModal();
+        navigateTo('screen-welcome');
+        showToast('Se borró todo');
+    }
+
+    /* ==========================================
+       TOAST
+       ========================================== */
+    let toastTimer = null;
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    /* ==========================================
+       COPIAR
+       ========================================== */
+    async function copyText(text) {
+        try {
+            await navigator.clipboard.writeText(text);
+            showToast('Copiado: ' + text);
+        } catch (e) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.left = '-9999px';
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            showToast('Copiado: ' + text);
+        }
+    }
+
+    /* ==========================================
+       CONFETTI
+       ========================================== */
+    function launchConfetti() {
+        const container = document.getElementById('confettiContainer');
+        container.innerHTML = '';
+        const colors = ['#FE2C55', '#25F4EE', '#FFD700', '#FF4D8D', '#7B68EE', '#00FF88', '#FF8FBB', '#FF6B35'];
+        for (let i = 0; i < 80; i++) {
+            const piece = document.createElement('div');
+            piece.className = 'confetti-piece';
+            piece.style.left = (Math.random() * 100) + '%';
+            piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+            piece.style.animationDelay = (Math.random() * 0.7) + 's';
+            piece.style.animationDuration = (1.8 + Math.random() * 2.5) + 's';
+            const size = 5 + Math.random() * 10;
+            piece.style.width = size + 'px';
+            piece.style.height = size * (0.3 + Math.random() * 0.7) + 'px';
+            piece.style.borderRadius = Math.random() > 0.3 ? '50%' : '2px';
+            container.appendChild(piece);
+        }
+        setTimeout(() => container.innerHTML = '', 5500);
+    }
+
+    /* ==========================================
+       INICIO
+       ========================================== */
+    function init() {
+        initWelcome();
+
+        if (state.roomId) {
+            renderStreakScreen();
+            setTimeout(() => navigateTo('screen-streak'), 100);
+        }
+
+        updateTimer();
+    }
+
+    init();
+</script>
+</body>
+</html>
